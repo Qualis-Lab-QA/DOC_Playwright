@@ -1,0 +1,38 @@
+<section id="ejecucion-pruebas" class="section-content">
+  <h1 class="section-title">Comandos de Ejecución</h1>
+
+  <div class="space-y-8">
+
+    <div>
+      <h2>Uso</h2>
+      <p class="section-paragraph">
+        Una vez que hayas instalado las dependencias, puedes ejecutar las pruebas utilizando los siguientes comandos:
+      </p>
+
+<pre><code class="language-bash">npm run test              # Ejecuta las pruebas de Cucumber y genera reporte
+npm run test:local        # Ejecuta las pruebas en modo no headless y genera los reportes
+npm run test:headless     # Ejecuta las pruebas en modo headless y genera los reportes
+npm run test:mobile       # Ejecuta las pruebas en un entorno simulado de móvil
+</code></pre>
+    </div>
+
+    <div>
+      <h2 class="text-2xl font-semibold mb-4">Ejecución con Tags</h2>
+      <p class="section-paragraph">
+        Para ejecutar pruebas filtrando por tags, se utiliza el siguiente comando:
+      </p>
+
+<pre><code class="language-bash">npm run test:tag --tags "@tagEjemplo"</code></pre>
+
+      <p class="section-paragraph mt-4">
+        Ejemplo de cómo definir un tag en el archivo Feature:
+      </p>
+
+<pre><code class="language-bash">@tagEjemplo
+Scenario: Solicitud Chequera
+  Given Dirigirse a HomeBanking
+</code></pre>
+    </div>
+
+  </div>
+</section>

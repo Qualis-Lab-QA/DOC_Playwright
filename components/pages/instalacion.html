@@ -1,0 +1,67 @@
+<section id="instalacion-playwright" class="section-content">
+
+  <h1 class="section-title">Instalación Playwright</h1>
+
+  <p class="section-paragraph"><strong>1. Clonar el repositorio</strong></p>
+  <pre><code class="language-bash">git clone https://github.com/Qualis-Lab-QA/Template-Playwright</code></pre>
+
+  <p class="section-paragraph"><strong>2. Navegar al directorio del proyecto</strong></p>
+  <pre><code class="language-bash">cd POC-Playwright</code></pre>
+
+  <p class="section-paragraph"><strong>3. Instalar Playwright</strong></p>
+  <pre><code class="language-bash">npx install playwright</code></pre>
+
+  <p class="section-paragraph"><strong>4. Instalar dependencias</strong></p>
+  <pre><code class="language-bash">npm install</code></pre>
+
+  <p class="section-paragraph"><strong>5. Instalar extensiones recomendadas en VS Code</strong></p>
+  <ul class="list-disc ml-6 section-paragraph">
+    <li>Cucumber - Cucumber</li>
+    <li>Playwright Test for VSCode - Microsoft</li>
+    <li>Playwright Test Snippets - Marl Skeleton</li>
+    <li>Gherkin Beautifier - Siarhei Kuchuk</li>
+    <li>Test Cucumber (Gherkin) Full Support - Robin GROSS</li>
+  </ul>
+
+  <p class="section-paragraph"><strong>6. Configurar extensiones en VS Code</strong></p>
+  <pre><code class="language-json">{
+  "cucumberautocomplete.steps": [
+    "cypress/e2e/step_definitions/*.js",
+    "src/step_definitions/*.js",
+    "src/steps/*.js"
+  ],
+  "cucumberautocomplete.syncfeatures": "features/*.feature",
+  "[javascript]": {
+    "editor.defaultFormatter": "vscode.typescript-language-features"
+  },
+  "cucumberautocomplete.onTypeFormat": true,
+  "cucumberautocomplete.strictGherkinCompletion": true,
+  "cucumberautocomplete.strictGherkinValidation": true,
+  "tabnine.experimentalAutoImports": true,
+  "javascript.updateImportsOnFileMove.enabled": "always",
+  "playwright.reuseBrowser": true,
+  "playwright.showTrace": false,
+  "explorer.confirmDragAndDrop": false,
+  "codeium.enableConfig": {
+    "*": true,
+    "javascript": false
+  },
+  "explorer.confirmDelete": false,
+  "git.confirmSync": false,
+  "liveServer.settings.donotShowInfoMsg": true
+}</code></pre>
+
+  <p class="section-paragraph"><strong>7. Instalar Java</strong></p>
+  <p class="section-paragraph">
+    Es necesario tener Java instalado para poder generar reportes con Allure.
+  </p>
+
+  <p class="section-paragraph"><strong>8. Crear carpeta para generar reportes</strong></p>
+  <pre><code class="language-plaintext">📂 output/
+ ┣ 📂 screenshots      ✅ (Capturas de pantalla en caso de fallos)
+ ┣ 📂 videos           ✅ (Grabaciones de la ejecución)
+ ┣ 📂 allure-report    ✅ (Reporte HTML generado)
+ ┗ 📂 allure-results   ✅ (Datos para la generación del reporte)
+</code></pre>
+
+</section>

@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Qualis Lab | Playwright Framework</title>
+  <link rel="icon" type="image/x-icon" href="./assets/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="./assets/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="./assets/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="./assets/favicon-16x16.png">
+  <link rel="manifest" href="./assets/site.webmanifest">
+  <script>
+    const theme = localStorage.getItem('theme') || 'dark';
+    document.documentElement.classList.remove('light', 'dark');
+    document.documentElement.classList.add(theme);
+
+    // Configuración global para rutas
+    window.config = {
+      getBasePath: () => {
+        const isGitHubPages = window.location.hostname.includes('github.io');
+        if (isGitHubPages) {
+          // Obtener el nombre del repositorio de la URL
+          const pathSegments = window.location.pathname.split('/');
+          const repoName = pathSegments[1] || '';
+          return `/${repoName}`;
+        }
+        return '';
+      }
+    };
+  </script>
+
+  <!-- Estilos y fuentes -->
+  <link rel="stylesheet" href="./styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;700&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
+  <!-- Highlight.js -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/github-dark.min.css" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+</head>
+<body>
+  <!-- Header fijo -->
+  <div id="header-container">
+    <header class="header">
+      <div class="header-left">
+        <a href="https://jdqualis.github.io/Qualis-Playwright-DOC#home">
+          <img src="./assets/logo.png" alt="Logo" class="logo" />
+        </a>
+      </div>
+
+      <div class="search-box-centered">
+        <div class="search-container">
+          <div class="search-input-wrapper">
+            <i class="fas fa-search search-icon"></i>
+            <input 
+              type="search" 
+              id="search-input" 
+              class="search-input" 
+              placeholder="Buscar en la documentación..." 
+              autocomplete="off" 
+            />
+          </div>
+          <div id="search-suggestions" class="search-suggestions"></div>
+        </div>
+      </div>
+
+      <div class="header-right">
+        <label class="toggle-switch">
+          <input type="checkbox" id="theme-toggle" />
+          <span class="slider"></span>
+        </label>
+      </div>
+    </header>
+  </div>
+
+  <div class="main-content">
+    <!-- Sidebar fijo -->
+    <div id="sidebar-container"></div>
+
+    <!-- Contenido dinamico -->
+    <div class="content">
+      <div class="content-container" id="main-content">
+        <!-- Se carga desde components/pages/*.html -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts core -->
+  <script>
+    function loadComponent(id, url, callback) {
+      const basePath = window.config.getBasePath();
+      // Asegurarse de que la URL comience con '/' y eliminar cualquier './' inicial
+      const cleanUrl = url.replace(/^\.\//, '');
+      const fullUrl = `${basePath}/${cleanUrl}`;
+      
+      fetch(fullUrl)
+        .then(res => {
+          if (!res.ok) throw new Error(`❌ Error al cargar ${fullUrl}`);
+          return res.text();
+        })
+        .then(html => {
+          document.getElementById(id).innerHTML = html;
+          if (callback) callback();
+        })
+        .catch(err => {
+          console.error(err);
+          document.getElementById(id).innerHTML = `<div style="color:red;">${err.message}</div>`;
+        });
+    }
+
+    // Hacer routeTo disponible globalmente
+    window.routeTo = function(page) {
+      const basePath = window.config.getBasePath();
+      const path = `${basePath}/components/pages/${page}.html`;
+      
+      fetch(path)
+        .then(res => {
+          if (!res.ok) throw new Error(`No se pudo cargar ${path}`);
+          return res.text();
+        })
+        .then(html => {
+          document.getElementById('main-content').innerHTML = html;
+          if (window.hljs) hljs.highlightAll();
+          window.history.pushState({}, '', `${basePath}#${page}`);
+        })
+        .catch(err => {
+          console.error(err);
+          document.getElementById('main-content').innerHTML = '<p style="color:red;">Error al cargar el contenido.</p>';
+        });
+    }
+
+    window.addEventListener('popstate', () => {
+      const page = window.location.hash.replace('#', '') || 'home';
+      routeTo(page);
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+      // Cargar header y luego inicializar la búsqueda
+      loadComponent('header-container', 'components/header.html', () => {
+        if (typeof initHeader === 'function') initHeader();
+        // Inicializar la búsqueda después de que el header esté cargado
+        import('./scripts/search.js').then(module => {
+          new module.SearchComponent();
+        });
+      });
+
+      // Cargar sidebar y contenido inicial
+      loadComponent('sidebar-container', 'components/sidebar.html', () => {
+        const hash = window.location.hash.replace('#', '');
+        const initialPage = hash || 'home';
+        routeTo(initialPage);
+      });
+
+      // Inicializar el toggle de tema
+      const themeToggle = document.getElementById('theme-toggle');
+      themeToggle.checked = theme === 'dark';
+      themeToggle.addEventListener('change', () => {
+        const newTheme = themeToggle.checked ? 'dark' : 'light';
+        document.documentElement.classList.remove('light', 'dark');
+        document.documentElement.classList.add(newTheme);
+        localStorage.setItem('theme', newTheme);
+      });
+    });
+  </script>
+
+  <!-- Scripts funcionales -->
+  <script src="./scripts/header.js" defer></script>
+</body>
+</html>

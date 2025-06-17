@@ -1,0 +1,141 @@
+<section id="buenas-practicas" class="section-content">
+  <h1 class="section-title" style="display: flex; align-items: center; gap: 0.7em;">
+    Buenas Prácticas del Framework
+  </h1>
+
+  <p class="section-paragraph">
+    A continuación se presentan buenas prácticas recomendadas para mantener un framework de automatización robusto, escalable y mantenible utilizando Playwright con Cucumber.
+  </p>
+
+  <hr class="hr-divider">
+
+  <h2 class="section-subtitle">Funciones dinámicas reutilizables</h2>
+  <p class="section-paragraph">
+    Es recomendable crear funciones que acepten parámetros para evitar duplicar lógica. Por ejemplo, si tenés una función que realiza una búsqueda en un sitio web, podés parametrizar el texto a buscar:
+  </p>
+
+  <pre class="code-block"><code>// src/pages/SearchPage.js
+
+  async buscarProducto(producto) {
+    await this.searchInput.fill(producto);
+    await this.searchButton.click();
+  }
+</code></pre>
+
+  <pre class="code-block"><code>// step_definitions/search.steps.js
+When(/^Seleccionamos producto: (.*)$/, async (producto) => {
+  await searchPage.buscarProducto(producto);
+});
+</code></pre>
+
+<h2 class="section-subtitle">Uso en archivo .feature</h2>
+<p class="section-paragraph">
+  En el archivo `.feature`, se define el producto en el step que se quiere realizar la búsqueda.
+</p>
+
+<pre class="code-block"><code>Feature: Búsqueda de productos
+
+Scenario: Buscar diferentes productos
+  When Seleccionamos producto: Automovil
+</code></pre>
+</section>
+
+  <p class="section-paragraph">
+    Esto permite reutilizar el mismo step con diferentes valores: “producto”, “servicio”, “oferta”, etc.
+  </p>
+
+  <hr class="hr-divider">
+
+  <h2 class="section-subtitle">Evitar duplicación de Step Definitions</h2>
+  <p class="section-paragraph">
+    No se deben definir múltiples steps con el mismo texto. Cucumber busca entre todos los archivos y ejecutará el primero que coincida, lo cual puede generar errores o comportamientos inesperados si hay duplicados.
+  </p>
+
+  <pre class="code-block"><code>// Correcto
+Given('el usuario está autenticado', async () => {
+  await loginPage.loginConUsuarioValido();
+});
+
+// Incorrecto - Duplicado en otro archivo
+Given('el usuario está autenticado', async () => {
+  // lógica distinta
+});
+</code></pre>
+
+  <hr class="hr-divider">
+
+  <h2 class="section-subtitle">Validar por visibilidad, no por tiempo</h2>
+  <p class="section-paragraph">
+    En lugar de usar tiempos fijos (como <code>waitForTimeout</code>), validá el estado real de los elementos para que las pruebas sean más estables y rápidas.
+  </p>
+
+  <pre class="code-block"><code>// Evitar
+await page.waitForTimeout(5000);
+
+// Preferir
+await page.locator('#resultado').waitFor({ state: 'visible' });
+</code></pre>
+
+  <hr class="hr-divider">
+
+  <h2 class="section-subtitle">Mantener el orden en el código</h2>
+  <p class="section-paragraph">
+    Agrupá las funciones en archivos por contexto (por ejemplo, `LoginPage`, `SearchPage`) y asegurate de seguir una convención clara para la estructura del proyecto. Evitá mezclar lógica de navegación, interacción y validación en un solo archivo.
+  </p>
+
+  <hr class="hr-divider">
+
+  <h2 class="section-subtitle">Gestionar los datos desde archivos externos</h2>
+  <p class="section-paragraph">
+    En lugar de hardcodear credenciales u otros valores en los steps, almacenalos en archivos `.json` dentro de una carpeta <code>data/</code>. Esto facilita su mantenimiento y reutilización en múltiples pruebas.
+  </p>
+
+  <pre class="code-block"><code>// data/users.json
+{
+  "admin": { "usuario": "admin", "password": "admin123" },
+  "guest": { "usuario": "invitado", "password": "invitado123" }
+}
+</code></pre>
+
+  <pre class="code-block"><code>// step_definitions/login.steps.js
+import users from '../../data/users.json';
+
+Given('el usuario {string} inicia sesión', async (rol) => {
+  const { usuario, password } = users[rol];
+  await loginPage.ingresarCredenciales(usuario, password);
+});
+</code></pre>
+
+  <hr class="hr-divider">
+
+  <h2 class="section-subtitle">Escribir nombres descriptivos en los escenarios</h2>
+  <p class="section-paragraph">
+    El título del escenario debe reflejar la intención de la prueba. Evitá nombres genéricos como “Login” y usá en su lugar descripciones claras del objetivo.
+  </p>
+
+  <pre class="code-block"><code>// Mejor
+Scenario: El usuario visualiza resultados al buscar "producto"
+</code></pre>
+
+  <hr class="hr-divider">
+
+  <h2 class="section-subtitle">Mantener las carpetas organizadas</h2>
+  <p class="section-paragraph">
+    Seguí una estructura coherente separando features, steps, páginas, hooks, utils y datos. Esto facilita la navegación y colaboración dentro del proyecto.
+  </p>
+
+  <pre class="code-block"><code>
+├── features/
+│   ├── login.feature
+│   └── search.feature
+├── src/
+│   ├── pages/
+│   │   ├── LoginPage.js
+│   │   └── SearchPage.js
+│   ├── step_definitions/
+│   ├── hooks/
+│   └── utils/
+├── data/
+│   └── users.json
+</code></pre>
+</section>

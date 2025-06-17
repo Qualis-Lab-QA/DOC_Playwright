@@ -1,0 +1,67 @@
+<section id="funcionamiento-playwright" class="section-content">
+  <h1 class="section-title" style="display: flex; align-items: center; gap: 0.7em;">
+    Playwright con Cucumber
+  </h1>
+
+  <p class="section-paragraph">
+    Playwright es una herramienta de automatización de navegadores que permite interactuar con aplicaciones web de forma rápida y confiable, simulando el comportamiento de un usuario real.
+    Cuando se combina con Cucumber, se obtiene una estructura de pruebas <strong>basada en comportamiento (BDD)</strong>, donde los casos de prueba se escriben en lenguaje natural (Gherkin),
+    facilitando la colaboración entre testers, desarrolladores y perfiles no técnicos.
+  </p>
+
+  <p class="section-paragraph">
+    En este framework, los archivos <code>.feature</code> describen los escenarios de prueba; los archivos de steps contienen la lógica que ejecuta cada paso;
+    y los Page Objects encapsulan la lógica de cada pantalla, promoviendo la reutilización y el mantenimiento del código.
+    Cucumber se encarga de recorrer automáticamente todos los archivos de steps definidos en el proyecto y vincularlos con los pasos de los escenarios escritos en Gherkin.
+  </p>
+
+  <hr class="hr-divider">
+
+  <h2 class="section-subtitle">Estructura general del framework</h2>
+  <ul class="section-paragraph">
+    <li><strong>Features:</strong> archivos <code>.feature</code> que describen los escenarios de prueba en lenguaje Gherkin.</li>
+    <li><strong>Steps:</strong> archivos <code>.js</code> o <code>.ts</code> que contienen la implementación técnica de los pasos definidos en los <code>.feature</code>.</li>
+    <li><strong>Pages / Page Objects:</strong> clases que encapsulan los elementos y acciones de cada página para promover la reutilización de código.</li>
+  </ul>
+
+  <hr class="hr-divider">
+
+  <h2 class="section-subtitle">Consideraciones sobre los Steps en Cucumber</h2>
+
+  <p class="section-paragraph">
+    <strong>1. Cucumber encuentra todos los steps disponibles:</strong><br>
+    Cuando Cucumber ejecuta un escenario, <strong>busca entre todos los archivos de definición de steps</strong> para encontrar una coincidencia exacta con el paso escrito en el archivo <code>.feature</code>.
+  </p>
+
+  <ul class="section-paragraph">
+    <li>No es necesario importar manualmente los steps: Cucumber los detecta automáticamente.</li>
+    <li>Todos los archivos de steps definidos en el proyecto son escaneados en cada ejecución.</li>
+  </ul>
+
+  <p class="section-paragraph">
+    <strong>2. No deben existir definiciones duplicadas:</strong><br>
+    Es importante tener en cuenta que <strong>no deben existir pasos con la misma expresión regular</strong> en múltiples archivos <strong>a menos que se desee reutilizar exactamente la misma lógica</strong>.
+  </p>
+
+  <p class="section-paragraph"><strong>✅ Ejemplo válido (reutilización intencional):</strong></p>
+  <pre class="code-block"><code>Given('the user is logged in', async () => {
+  await loginPage.loginWithValidCredentials();
+});</code></pre>
+
+  <p class="section-paragraph"><strong>❌ Ejemplo problemático (duplicación no intencionada):</strong></p>
+  <pre class="code-block"><code>// En un archivo:
+Given('the user is logged in', async () => { /* lógica A */ });
+
+// En otro archivo:
+Given('the user is logged in', async () => { /* lógica B */ });</code></pre>
+
+  <p class="section-paragraph">
+    Esto puede provocar <strong>ambigüedad</strong>, errores de ejecución o resultados inesperados. Por eso se recomienda:
+  </p>
+
+  <ul class="section-paragraph">
+    <li>Mantener las definiciones de steps organizadas por contexto o funcionalidad.</li>
+    <li>Verificar que no se repitan expresiones Gherkin salvo que se comparta intencionalmente la lógica.</li>
+    <li>Utilizar expresiones regulares más específicas si los pasos parecen similares pero requieren comportamientos diferentes.</li>
+  </ul>
+</section>

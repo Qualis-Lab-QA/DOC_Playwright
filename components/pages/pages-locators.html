@@ -1,0 +1,110 @@
+<section class="section-content">
+  <h1 class="section-title">📂 Pages y Locators</h1>
+
+  <p class="section-paragraph">
+    En esta sección documentamos la estructura y organización del patrón Page Object implementado en el framework. 
+    Esta convención permite mantener las acciones automatizadas desacopladas de los selectores, promoviendo el 
+    mantenimiento y la escalabilidad del código de automatización.
+  </p>
+  
+  <p class="section-paragraph">
+    Cada pantalla o flujo funcional se representa mediante una clase con métodos reutilizables que encapsulan interacciones 
+    con la UI. Los elementos utilizados se definen en archivos separados llamados <code>locators.js</code>, lo que permite 
+    mantener el código limpio y de fácil actualización ante cambios visuales en la aplicación.
+  </p>
+  
+  <p class="section-paragraph">
+    A continuación, se describe la estructura general esperada, la forma correcta de declarar métodos reutilizables con parámetros 
+    dinámicos y cómo estas clases interactúan con los pasos de prueba definidos en Gherkin.
+  </p>
+
+  <h2 class="text-xl font-bold mb-4">Estructura General</h2>
+  <pre><code class="plaintext">Ejemplo:
+
+src/
+└── pages/
+    └── {sección}/
+        ├── {page}.js (clase de página)
+        └── locators.js (localizadores de elementos)
+
+_____________________________________________________
+Ejemplo con datos:
+
+src/
+└── pages/
+    └── cheques/
+        ├── solicitar.js (clase de página)
+        └── locators.js (localizadores de elementos)
+</code></pre>
+
+  <h2 class="text-xl font-bold mt-10 mb-4">Organización de las Clases</h2>
+  <p class="section-paragraph">Cada archivo <code>{page}.js</code> representa una sección funcional del sistema, incluyendo:</p>
+  <ul class="section-paragraph">
+    <li>Métodos simples: Interacciones básicas (clics, inputs, etc.).</li>
+    <li>Métodos compuestos: Flujos que combinan múltiples interacciones.</li>
+  </ul>
+
+  <pre><code class="language-javascript">const elements = require('./locators').solicitarLocators;
+const btn = elements.btn;
+const input = elements.input;
+const select = elements.select;
+
+class Solicitar {
+    async clickCheques() {
+        await btn.cheques().click();
+    }
+
+    async clickSolicitar() {
+        await btn.solicitar().click();
+    }
+}
+
+module.exports = new Solicitar();</code></pre>
+
+  <h3 class="text-lg font-semibold mt-10 mb-4">2. Localizadores (locators.js)</h3>
+  <p class="section-paragraph">Archivo que define todos los elementos de la página, agrupados por tipo de componente.</p>
+
+  <pre><code class="language-javascript">let solicitarLocators = {
+  btn: {
+      cheques: () => page.locator('span', { hasText: 'Cheques' }),
+      solicitar: () => page.locator('div >> text="solicitar"')
+  },
+  input: {
+      token: () => page.locator('input')
+  }
+};
+
+module.exports = { solicitarLocators };</code></pre>
+
+  <h2 class="text-xl font-bold mt-10 mb-4">Funciones con Parámetros</h2>
+  <p class="section-paragraph">
+    Algunas funciones dentro de las clases reciben parámetros dinámicos. Estos parámetros pueden ser completados más adelante desde archivos Gherkin. Aquí mostramos cómo declarar correctamente este tipo de funciones dentro del Page.
+  </p>
+
+  <pre><code class="language-javascript">async fillToken(token) {
+  await input.token().fill(token);
+}</code></pre>
+
+  <p class="section-paragraph">Ejemplo de cómo se genera el llamado desde el Step Definition:</p>
+  <pre><code class="language-javascript">When(/^Ingresamos el token: (.*)$/, async (token) => {
+  await solicitar.fillToken(token);
+});</code></pre>
+
+  <p class="section-paragraph">Y el ejemplo de Step en el archivo Gherkin:</p>
+  <pre><code class="language-bash">When Ingresamos el token: 123456</code></pre>
+
+  <p class="section-paragraph">
+    De esta manera, el valor dinámico será pasado automáticamente a la función definida en la Page.
+  </p>
+
+  <h2 class="text-xl font-bold mt-10 mb-4">Notas Adicionales</h2>
+  <ul class="section-paragraph">
+    <li>Cuando se escriba <code>await page.</code> dentro de una función, se habilitará el autocompletado de funciones y selectores nativos de Playwright.</li>
+    <li>
+      Para más información sobre los comandos disponibles de Playwright, consultar:
+      <ul class="section-paragraph ml-4">
+        <li><a href="https://playwright.dev/docs/locators" class="text-blue-600 underline" target="_blank">Documentación oficial - Locators</a></li>
+      </ul>
+    </li>
+  </ul>
+</section>

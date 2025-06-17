@@ -1,0 +1,61 @@
+<section id="utils" class="section-content">
+    <h1 class="section-title" style="display: flex; align-items: center; gap: 0.7em;">
+      Utils
+    </h1>
+  
+    <p class="section-paragraph">
+      La carpeta <code>utils/</code> centraliza funciones auxiliares que son utilizadas en distintas partes del framework.
+      Su objetivo es <strong>reutilizar lógica común</strong>, evitar duplicación de código y mantener ordenado el proyecto.
+    </p>
+  
+    <hr class="hr-divider">
+  
+    <h2 class="section-subtitle">¿Qué tipo de utilidades suelen incluirse?</h2>
+  
+    <ul class="section-paragraph">
+      <li>Funciones para formateo de fechas y horas.</li>
+      <li>Conversores o manipuladores de strings.</li>
+      <li>Lectura y manejo de datos desde archivos JSON.</li>
+      <li>Generadores de datos para pruebas.</li>
+      <li>Funciones para capturar evidencias o medir tiempos.</li>
+    </ul>
+  
+    <hr class="hr-divider">
+  
+    <h2 class="section-subtitle">Ejemplos comunes</h2>
+  
+    <h3 class="section-paragraph">formatearFecha():</h3> Fecha en formato DD/MM/YYYY
+    <pre class="code-block"><code>// utils/fecha.js
+  export function formatearFecha(fecha = new Date()) {
+    const dia = String(fecha.getDate()).padStart(2, '0');
+    const mes = String(fecha.getMonth() + 1).padStart(2, '0');
+    const anio = fecha.getFullYear();
+    return `${dia}/${mes}/${anio}`;
+  }
+  </code></pre>
+  
+    <hr class="hr-divider">
+  
+    <h2 class="section-subtitle">Uso en los steps</h2>
+  
+    <pre class="code-block"><code>// step_definitions/log.steps.js
+  import { formatearFecha } from '../../utils/fecha.js';
+  
+  Then('loggeamos la fecha actual', async () => {
+    const fecha = formatearFecha();
+    console.log(`🕒 Fecha actual: ${fecha}`);
+  });
+  </code></pre>
+  
+    <hr class="hr-divider">
+  
+    <h2 class="section-subtitle">Ventajas de usar utils</h2>
+  
+    <ul class="section-paragraph">
+      <li>Reutilización de lógica común en múltiples archivos.</li>
+      <li>Más claridad en los steps, que quedan enfocados en el flujo.</li>
+      <li>Menos errores y mayor mantenibilidad.</li>
+      <li>Fácil actualización y extensión de funciones compartidas.</li>
+    </ul>
+  </section>
+  

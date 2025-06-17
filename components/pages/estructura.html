@@ -1,0 +1,64 @@
+<section id="estructura-principal" class="section-content">
+  <h1 class="section-title">Estructura del Proyecto</h1>
+
+  <p class="section-paragraph">
+    El proyecto está diseñado con una arquitectura modular que permite una gestión eficiente del código fuente y facilita la colaboración entre distintos miembros del equipo. Esta organización no solo optimiza el mantenimiento a largo plazo, sino que también agiliza la incorporación de nuevas funcionalidades, la ejecución de pruebas automatizadas y la integración con pipelines de CI/CD.
+  </p>
+
+  <p class="section-paragraph">
+    Cada carpeta dentro del repositorio cumple un rol específico dentro del ciclo de vida de las pruebas automatizadas: desde la definición de escenarios en lenguaje natural, pasando por la implementación técnica, hasta la generación de reportes visuales que permiten un análisis rápido de los resultados.
+  </p>
+
+  <p class="section-paragraph">
+    A continuación, se describe la estructura principal del proyecto, destacando la función de cada componente y su utilidad dentro del framework:
+  </p>
+
+<pre><code class="language-plaintext">📁data/ > Datos de prueba
+ └── *.json / *.csv > Archivos estructurados que contienen los datos utilizados por los tests.
+                     Pueden representar distintos escenarios o combinaciones de inputs.
+
+📁Features/ > Escenarios de prueba escritos en Gherkin
+ └── *.feature > Documentos legibles por negocio donde se detallan los comportamientos esperados.
+                 Usan sintaxis Given / When / Then para facilitar la trazabilidad.
+
+📁node_modules/ > Dependencias instaladas por NPM
+ └── Este directorio es autogenerado al ejecutar `npm install` y contiene todas las librerías necesarias
+     para correr el framework, incluyendo Playwright, Cucumber, Allure y otras herramientas complementarias.
+
+📁output/ > Resultados de la ejecución de las pruebas
+ ├── allure-report/ > Reporte visual en HTML generado post ejecución. Navegable e interactivo.
+ ├── allure-results/ > Archivos brutos que alimentan el reporte Allure.
+ ├── screenshots/ > Evidencia visual automática de fallos. Útil para debugging.
+ └── videos/ > Grabaciones completas de las ejecuciones. Especialmente útil para análisis post-mortem.
+
+📁src/ > Código fuente del framework
+ ├── pages/ > Implementación del patrón Page Object
+ │    ├── page.js > Métodos reutilizables que encapsulan interacciones comunes con la UI.
+ │    └── locators.js > Centralización de selectores para facilitar el mantenimiento.
+ ├── step_definitions/ > Implementación de pasos definidos en los archivos .feature
+ │    └── exampleSteps.js > Lógica de automatización correspondiente a cada paso Gherkin.
+
+📁support/ > Configuraciones globales y utilidades compartidas
+ ├── browser.Config.js > Configuración del navegador, contexto y capacidades personalizadas.
+ ├── generateCucumberReport.js > Script auxiliar para convertir los resultados en reportes HTML.
+ ├── TestHooks.js > Hooks de ejecución: beforeAll, beforeEach, afterAll, etc.
+ └── utils.js > Funciones auxiliares que encapsulan lógica común (formateo de fechas, esperas, etc.)
+
+.env > Archivo de variables de entorno. Permite personalizar la ejecución sin alterar el código.
+cucumber.json > Configuración del runner de Cucumber (formato, rutas, tags, etc.)
+global.d.ts > Tipado global para mejorar autocompletado y evitar errores en tiempo de desarrollo.
+.gitignore > Define qué archivos no deben incluirse en el repositorio (node_modules, output, .env, etc.)
+jsconfig.json > Mejora la experiencia en editores como VSCode habilitando el IntelliSense.
+package.json > Declara las dependencias del proyecto, scripts de ejecución y metadata.
+package-lock.json > Archivo autogenerado que garantiza la consistencia de las dependencias.
+playwright.config.js > Configuración centralizada de Playwright: baseURL, timeouts, retries, paths, etc.
+</code></pre>
+
+  <p class="section-paragraph">
+    Esta organización está pensada para maximizar la mantenibilidad, permitir el versionado claro de cada componente y escalar fácilmente en equipos grandes. Además, permite aislar responsabilidades (datos, lógica, configuración, reportes), lo que facilita la depuración y la evolución del proyecto.
+  </p>
+
+  <p class="section-paragraph">
+    El uso de buenas prácticas como Page Object Model, separación de datos y lógica de automatización, y generación de reportes visuales con Allure convierte a esta estructura en una base sólida para cualquier proyecto de automatización profesional.
+  </p>
+</section>
