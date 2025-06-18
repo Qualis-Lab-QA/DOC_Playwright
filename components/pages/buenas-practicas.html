@@ -7,6 +7,31 @@
     A continuación se presentan buenas prácticas recomendadas para mantener un framework de automatización robusto, escalable y mantenible utilizando Playwright con Cucumber.
   </p>
 
+  <h2 class="section-subtitle">Buenas prácticas de nomenclatura</h2>
+<p class="section-paragraph">
+  Para mantener un framework legible, escalable y profesional, es importante respetar convenciones claras en los nombres de variables, métodos, clases, archivos y selectores.
+</p>
+
+<ul class="section-list">
+  <li><strong>Variables:</strong> usar <code>camelCase</code>. Ej: <code>usuarioLogueado</code>, <code>resultadoBusqueda</code>.</li>
+  <li><strong>Métodos/Funciones:</strong> usar <code>camelCase</code> comenzando con verbo. Ej: <code>hacerClickEnBoton()</code>, <code>obtenerMontoDesdeAPI()</code>.</li>
+  <li><strong>Clases:</strong> usar <code>PascalCase</code>. Ej: <code>LoginPage</code>, <code>SearchHelper</code>.</li>
+  <li><strong>Archivos:</strong>
+    <ul>
+      <li><code>login.page.js</code> (Page Objects)</li>
+      <li><code>registro.steps.js</code> (Step Definitions)</li>
+      <li><code>apiHelper.js</code> (Helpers o Utils)</li>
+    </ul>
+  </li>
+  <li><strong>Selectores:</strong> nombrarlos descriptivamente en archivos centralizados. Preferir atributos como <code>data-testid</code>:
+    <pre class="code-block"><code>export const botonConfirmar = '[data-testid="btn-confirmar"]';
+export const campoUsuario = '#usuario';</code></pre>
+  </li>
+  <li><strong>Idioma:</strong> mantener el mismo idioma en todo el proyecto (preferentemente todo en español o todo en inglés).</li>
+  <li><strong>Consistencia:</strong> aplicar los mismos sufijos/prefijos en todo el framework. Por ejemplo, siempre usar el sufijo <code>Page</code> para clases de páginas.</li>
+</ul>
+
+
   <hr class="hr-divider">
 
   <h2 class="section-subtitle">Funciones dinámicas reutilizables</h2>
