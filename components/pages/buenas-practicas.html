@@ -13,24 +13,52 @@
 </p>
 
 <ul class="section-list">
-  <li><strong>Variables:</strong> usar <code>camelCase</code>. Ej: <code>usuarioLogueado</code>, <code>resultadoBusqueda</code>.</li>
-  <li><strong>Métodos/Funciones:</strong> usar <code>camelCase</code> comenzando con verbo. Ej: <code>hacerClickEnBoton()</code>, <code>obtenerMontoDesdeAPI()</code>.</li>
-  <li><strong>Clases:</strong> usar <code>PascalCase</code>. Ej: <code>LoginPage</code>, <code>SearchHelper</code>.</li>
-  <li><strong>Archivos:</strong>
+  <li><strong>Variables:</strong> usar <code>camelCase</code>. Ejemplos:
     <ul>
-      <li><code>login.page.js</code> (Page Objects)</li>
-      <li><code>registro.steps.js</code> (Step Definitions)</li>
-      <li><code>apiHelper.js</code> (Helpers o Utils)</li>
+      <li><code>usuarioLogueado</code></li>
+      <li><code>totalFiltrado</code></li>
+      <li><code>mensajeError</code></li>
     </ul>
   </li>
-  <li><strong>Selectores:</strong> nombrarlos descriptivamente en archivos centralizados. Preferir atributos como <code>data-testid</code>:
+
+  <li><strong>Métodos/Funciones:</strong> usar <code>camelCase</code> comenzando con un verbo. Ejemplos:
+    <ul>
+      <li><code>ingresarCredenciales()</code></li>
+      <li><code>validarResultadoEsperado()</code></li>
+      <li><code>esperarElementoVisible()</code></li>
+    </ul>
+  </li>
+
+  <li><strong>Clases:</strong> usar <code>PascalCase</code>. Ejemplos:
+    <ul>
+      <li><code>LoginPage</code> → representa una página de login.</li>
+      <li><code>SearchResultsPage</code> → representa los resultados de búsqueda.</li>
+      <li><code>ApiClient</code> → clase auxiliar para manejar APIs.</li>
+    </ul>
+  </li>
+
+  <li><strong>Archivos:</strong> seguir una convención clara:
+    <ul>
+      <li><code>login.page.js</code> → Page Object</li>
+      <li><code>registro.steps.js</code> → Step Definitions</li>
+      <li><code>formHelper.js</code> → Funciones auxiliares</li>
+    </ul>
+  </li>
+
+  <li><strong>Selectores:</strong> definirlos en archivos centralizados y descriptivos. Priorizar el uso de atributos como <code>data-testid</code> para mayor estabilidad.
     <pre class="code-block"><code>export const botonConfirmar = '[data-testid="btn-confirmar"]';
 export const campoUsuario = '#usuario';</code></pre>
   </li>
-  <li><strong>Idioma:</strong> mantener el mismo idioma en todo el proyecto (preferentemente todo en español o todo en inglés).</li>
-  <li><strong>Consistencia:</strong> aplicar los mismos sufijos/prefijos en todo el framework. Por ejemplo, siempre usar el sufijo <code>Page</code> para clases de páginas.</li>
-</ul>
 
+  <li><strong>Idioma:</strong> mantener el mismo idioma en todo el proyecto (preferentemente todo en español o todo en inglés).</li>
+
+  <li><strong>Consistencia:</strong> aplicar los mismos sufijos/prefijos en todo el framework. Por ejemplo:
+    <ul>
+      <li><code>Page</code> para Page Objects: <code>HomePage</code>, <code>CheckoutPage</code></li>
+      <li><code>Helper</code> o <code>Client</code> para utilidades: <code>ApiClient</code>, <code>DateHelper</code></li>
+    </ul>
+  </li>
+</ul>
 
   <hr class="hr-divider">
 
