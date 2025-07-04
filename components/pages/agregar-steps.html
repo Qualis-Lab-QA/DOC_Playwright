@@ -1,0 +1,60 @@
+<section id="agregar-flujo-steps" class="section-content">
+  <h2 class="section-subtitle">Paso a paso para agregar un flujo nuevo en Playwright + Cucumber</h2>
+
+  <p class="section-paragraph">
+    Este es el flujo recomendado para agregar un nuevo paso funcional dentro del framework, desde el archivo <code>.feature</code> hasta el selector final.
+    El ejemplo utilizado es para un inicio de sesión en la página <strong>demoblaze</strong>.
+  </p>
+
+  <hr class="hr-divider">
+
+  <h3 class="section-subtitle">1️⃣ Agregar el paso en el archivo <code>.feature</code></h3>
+  <p class="section-paragraph">
+    Comenzamos escribiendo el paso deseado en lenguaje Gherkin:
+  </p>
+  <pre class="code-block"><code>When inicio sesión</code></pre>
+
+  <h3 class="section-subtitle">2️⃣ Crear el step en el archivo de <code>step_definitions</code></h3>
+  <p class="section-paragraph">
+    En el archivo correspondiente a los steps (por ejemplo, <code>login.steps.js</code>), se crea la función que ejecutará la acción:
+  </p>
+  <pre class="code-block"><code>When('inicio sesión', async () => {
+  await demoblazePage.clickLogin();
+});</code></pre>
+
+  <h3 class="section-subtitle">3️⃣ Crear la función dentro del Page Object</h3>
+  <p class="section-paragraph">
+    En la clase de página (por ejemplo, <code>DemoblazePage.js</code>), se define la función que encapsula la acción:
+  </p>
+  <pre class="code-block"><code>async clickLogin() {
+  await this.elements.buttonLogin().click();
+}</code></pre>
+
+  <h3 class="section-subtitle">4️⃣ Agregar el selector en el archivo de objetos</h3>
+  <p class="section-paragraph">
+    Finalmente, se incorpora el selector dentro del archivo de objetos (por ejemplo, <code>objDemoblazePage.js</code>):
+  </p>
+  <pre class="code-block"><code>const objDemoblazePage = {
+  buttonLogin: () => page.locator('button#login'),
+};
+
+export default objDemoblazePage;</code></pre>
+
+  <p class="section-paragraph">
+    ⚠️ Recordá adaptar el selector según el HTML real. Usá atributos únicos como <code>id</code>, <code>data-test</code>, o clases específicas para mayor estabilidad.
+  </p>
+
+  <hr class="hr-divider">
+
+  <h3 class="section-subtitle">📌 Resumen del flujo</h3>
+  <ul class="section-paragraph">
+    <li>1. Escribís el paso en el archivo <code>.feature</code>.</li>
+    <li>2. Implementás la función en el archivo de steps.</li>
+    <li>3. Llamás a la acción desde la clase Page correspondiente.</li>
+    <li>4. Usás un locator claro y mantenible en el archivo de objetos.</li>
+  </ul>
+
+  <p class="section-paragraph">
+    Este patrón asegura una estructura limpia, mantenible y escalable, separando claramente la lógica de negocio (los pasos) de los detalles de implementación (selectores y acciones).
+  </p>
+</section>
