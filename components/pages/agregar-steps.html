@@ -22,23 +22,25 @@
   await demoblazePage.clickLogin();
 });</code></pre>
 
-  <h3 class="section-subtitle">3️⃣ Crear la función dentro del Page Object</h3>
+  <h3 class="section-subtitle">3️⃣ Crear la función dentro de la clase Page</h3>
   <p class="section-paragraph">
-    En la clase de página (por ejemplo, <code>DemoblazePage.js</code>), se define la función que encapsula la acción:
+    En la clase de página (por ejemplo, <code>DemoblazePage.js</code>), se define la función que encapsula la acción. Esta clase contiene tanto acciones simples como acciones conjuntas.
   </p>
   <pre class="code-block"><code>async clickLogin() {
-  await this.elements.buttonLogin().click();
+  await objetoDemoblaze.buttonLogin().click();
 }</code></pre>
 
-  <h3 class="section-subtitle">4️⃣ Agregar el selector en el archivo de objetos</h3>
+  <h3 class="section-subtitle">4️⃣ Agregar el selector en la clase de objetos</h3>
   <p class="section-paragraph">
-    Finalmente, se incorpora el selector dentro del archivo de objetos (por ejemplo, <code>objDemoblazePage.js</code>):
+    Finalmente, se incorpora el selector dentro de una clase separada que contiene únicamente los objetos (por ejemplo, <code>objetoDemoblaze.js</code>):
   </p>
-  <pre class="code-block"><code>const objDemoblazePage = {
-  buttonLogin: () => page.locator('button#login'),
-};
+  <pre class="code-block"><code>class objetoDemoblaze {
+  static buttonLogin() {
+    return page.locator('button#login');
+  }
+}
 
-export default objDemoblazePage;</code></pre>
+export default objetoDemoblaze;</code></pre>
 
   <p class="section-paragraph">
     ⚠️ Recordá adaptar el selector según el HTML real. Usá atributos únicos como <code>id</code>, <code>data-test</code>, o clases específicas para mayor estabilidad.
@@ -50,8 +52,8 @@ export default objDemoblazePage;</code></pre>
   <ul class="section-paragraph">
     <li>1. Escribís el paso en el archivo <code>.feature</code>.</li>
     <li>2. Implementás la función en el archivo de steps.</li>
-    <li>3. Llamás a la acción desde la clase Page correspondiente.</li>
-    <li>4. Usás un locator claro y mantenible en el archivo de objetos.</li>
+    <li>3. Llamás a la acción desde la clase <strong>Page</strong>.</li>
+    <li>4. Usás un locator claro y mantenible en la clase <strong>objeto</strong>.</li>
   </ul>
 
   <p class="section-paragraph">
